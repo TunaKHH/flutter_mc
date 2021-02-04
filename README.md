@@ -1,6 +1,7 @@
-# mc
+# Fake MC 
+如圖所示
 
-fake mc
+什麼都還沒有
 
 ## Getting Started
 
