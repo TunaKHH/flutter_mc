@@ -12,33 +12,58 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Startup Name Generator',
-        home: RandomWords(),
+        home: FoodWords(),
     );
   }
 }
 
-class RandomWords extends StatefulWidget {
+class FoodWords extends StatefulWidget {
   @override
-  _RandomWordsState createState() => _RandomWordsState();
+  _FoodWordsState createState() => _FoodWordsState();
 }
 
-class _RandomWordsState extends State<RandomWords> {
 
+class _FoodWordsState extends State<FoodWords> {
   @override
   final _suggestions = <WordPair>[];
-  final _saved = Set<WordPair>();
+  // final _suggestions
   final _biggerFont = TextStyle(fontSize: 18.0);
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Startup Name Generator'),
-        actions: [
-          IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
+        title: Text('優惠券'),
+        centerTitle: true,
+      ),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.fastfood),
+            title: Text('嫩煎雞腿堡'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => YourNewPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.fastfood),
+            title: Text('10元冰淇淋'),
+          ),
+          ListTile(
+            leading: Icon(Icons.fastfood),
+            title: Text('蕈菇豬肉滿福堡'),
+          ),
         ],
       ),
-      body: _buildSuggestions(),
     );
+  }
+
+  Widget YourNewPage(){
+
   }
 
   Widget _buildSuggestions() {
@@ -57,58 +82,12 @@ class _RandomWordsState extends State<RandomWords> {
   }
 
   Widget _buildRow(WordPair pair) {
-    final alreadySaved = _saved.contains(pair);
+
     return ListTile(
       title: Text(
         pair.asPascalCase,
         style: _biggerFont,
       ),
-      trailing: Icon(
-        alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null,
-      ),
-      onTap: (){
-        setState(() {
-          if(alreadySaved){
-            _saved.remove(pair);
-          }else{
-            _saved.add(pair);
-          }
-        });
-      },
     );
   }
-
-
-  void _pushSaved() {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        // NEW lines from here...
-        builder: (BuildContext context) {
-          final tiles = _saved.map(
-                (WordPair pair) {
-              return ListTile(
-                title: Text(
-                  pair.asPascalCase,
-                  style: _biggerFont,
-                ),
-              );
-            },
-          );
-          final divided = ListTile.divideTiles(
-            context: context,
-            tiles: tiles,
-          ).toList();
-
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Saved Suggestions'),
-            ),
-            body: ListView(children: divided),
-          );
-        }, // ...to here.
-      ),
-    );
-  }
-
 }
