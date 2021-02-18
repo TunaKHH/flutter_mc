@@ -28,11 +28,13 @@ class _FoodWordsState extends State<FoodWords> {
   final _suggestions = <WordPair>[];
   // final _suggestions
   final _biggerFont = TextStyle(fontSize: 18.0);
+  final _saved = Set<WordPair>();
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('優惠券'),
+        backgroundColor: Color(0xffcc311f),
         centerTitle: true,
       ),
       body: ListView(
@@ -44,7 +46,7 @@ class _FoodWordsState extends State<FoodWords> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => YourNewPage(),
+                  builder: (context) => yourNewPage(context),
                 ),
               );
             },
@@ -52,42 +54,118 @@ class _FoodWordsState extends State<FoodWords> {
           ListTile(
             leading: Icon(Icons.fastfood),
             title: Text('10元冰淇淋'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => yourNewPage(context),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.fastfood),
             title: Text('蕈菇豬肉滿福堡'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => yourNewPage(context),
+                ),
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget YourNewPage(){
+  Widget yourNewPage(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('優惠券'),
+        centerTitle: true,
+        backgroundColor: Color(0xffcc311f),
+      ),
+      body: ListView(
+        // This next line does the trick.
+        reverse: true,
+        children: <Widget>[
 
-  }
+          InkWell(
+            child: new Image.asset(
+              'images/2.png',
+              // height: 60.0,
+              fit: BoxFit.cover,
 
-  Widget _buildSuggestions() {
-    return ListView.builder(
-        padding: EdgeInsets.all(16.0),
-        itemBuilder: /*1*/ (context, i) {
-          if (i.isOdd) return Divider();
-          /*2*/
+            ),
+            onTap: () {
+              showAlertDialog(context);
+              // print("tapped on container");
+            },
 
-          final index = i ~/ 2; /*3*/
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10)); /*4*/
-          }
-          return _buildRow(_suggestions[index]);
-        });
-  }
 
-  Widget _buildRow(WordPair pair) {
+          ),
 
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
+        ],
       ),
     );
   }
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("暫不兌換"),
+      onPressed:  () => Navigator.pop(context),
+    );
+    Widget continueButton = FlatButton(
+      child: Text("立即兌換"),
+      onPressed:  () {
+        Navigator.pop(context);
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('優惠券3'),
+            centerTitle: true,
+            backgroundColor: Color(0xffcc311f),
+
+          ),
+          body: ListView(
+            // This next line does the trick.
+            reverse: true,
+            children: <Widget>[
+              new Image.asset(
+                'images/1.png',
+                height: 60.0,
+                fit: BoxFit.fitWidth,
+              ),
+
+
+            ],
+          ),
+        );
+
+
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("確認兌換優惠"),
+      content: Text("請確認您已在麥當勞櫃台，點選「立即兌換」後，需於兩分鐘內出示給結帳人員"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 }
