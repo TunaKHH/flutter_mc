@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 # learn_flutter
 
 A new Flutter project.
+=======
+# Fake MC 
+如圖所示
+
+什麼都還沒有
+>>>>>>> 3041b5709004dc5aa1c514c6c031dec0e27f0065
 
 ## Getting Started
 
