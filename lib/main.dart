@@ -1,41 +1,42 @@
-// Copyright 2018 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'dart:math';
 
-void main() => runApp(MyApp());
+
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Startup Name Generator',
-        home: FoodWords(),
+      debugShowCheckedModeBanner:false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class FoodWords extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+  final String title;
+
   @override
-  _FoodWordsState createState() => _FoodWordsState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-
-class _FoodWordsState extends State<FoodWords> {
+class _MyHomePageState extends State<MyHomePage> {
   @override
-  final _suggestions = <WordPair>[];
-  // final _suggestions
-  final _biggerFont = TextStyle(fontSize: 18.0);
-  final _saved = Set<WordPair>();
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('優惠券'),
-        backgroundColor: Color(0xffcc311f),
-        centerTitle: true,
+        title: Text(widget.title),
       ),
       body: ListView(
         children: <Widget>[
@@ -46,7 +47,7 @@ class _FoodWordsState extends State<FoodWords> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => yourNewPage(context),
+                  builder: (context) => Page2(),
                 ),
               );
             },
@@ -58,7 +59,7 @@ class _FoodWordsState extends State<FoodWords> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => yourNewPage(context),
+                  builder: (context) => Page2(),
                 ),
               );
             },
@@ -70,7 +71,7 @@ class _FoodWordsState extends State<FoodWords> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => yourNewPage(context),
+                  builder: (context) => Page2(),
                 ),
               );
             },
@@ -79,38 +80,15 @@ class _FoodWordsState extends State<FoodWords> {
       ),
     );
   }
+}
 
-  Widget yourNewPage(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('優惠券'),
-        centerTitle: true,
-        backgroundColor: Color(0xffcc311f),
-      ),
-      body: ListView(
-        // This next line does the trick.
-        reverse: true,
-        children: <Widget>[
+class Page2 extends StatefulWidget {
+  String get title => "優惠券";
+  @override
+  State<StatefulWidget> createState() => _Page2State();
+}
 
-          InkWell(
-            child: new Image.asset(
-              'images/2.png',
-              // height: 60.0,
-              fit: BoxFit.cover,
-
-            ),
-            onTap: () {
-              showAlertDialog(context);
-              // print("tapped on container");
-            },
-
-
-          ),
-
-        ],
-      ),
-    );
-  }
+class _Page2State extends State<Page2> {
 
   showAlertDialog(BuildContext context) {
 
@@ -123,29 +101,12 @@ class _FoodWordsState extends State<FoodWords> {
       child: Text("立即兌換"),
       onPressed:  () {
         Navigator.pop(context);
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('優惠券3'),
-            centerTitle: true,
-            backgroundColor: Color(0xffcc311f),
-
-          ),
-          body: ListView(
-            // This next line does the trick.
-            reverse: true,
-            children: <Widget>[
-              new Image.asset(
-                'images/1.png',
-                height: 60.0,
-                fit: BoxFit.fitWidth,
-              ),
-
-
-            ],
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Page3(),
           ),
         );
-
-
       },
     );
 
@@ -159,7 +120,6 @@ class _FoodWordsState extends State<FoodWords> {
       ],
     );
 
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -168,4 +128,147 @@ class _FoodWordsState extends State<FoodWords> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text( widget.title,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xffcc311f),
+        centerTitle: true,
+      ),
+      body:Stack(
+        alignment: const Alignment(0, 1),
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/2.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: null /* add child content here */,
+          ),
+
+          InkWell(
+            child:
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xffffa72f),
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: Center(
+                  child:
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      new Text(
+                        "兌換優惠",
+                        style: new TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                      ),
+                    ]
+                  ),
+                ),
+              ),
+            ),
+            onTap: () {
+              showAlertDialog(context);
+            },
+          ),
+
+
+        ]
+      )
+
+    );
+  }
+}
+
+class Page3 extends StatefulWidget {
+  String get title => "優惠券";
+  @override
+  State<StatefulWidget> createState() => _Page3State();
+}
+class _Page3State extends State<Page3> {
+  int _counter = 0;
+  Timer _timer;
+  int _start = 59;
+
+  void initState() {
+    super.initState();
+    _timer = new Timer.periodic(
+      const Duration(seconds: 1),
+          (Timer timer) => setState(() {
+        if (_start < 1) {
+          timer.cancel();
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text( widget.title,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xffcc311f),
+        centerTitle: true,
+      ),
+      body:
+      Stack(
+        alignment: const Alignment(0, 1),
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/2.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: null /* add child content here */,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Color(0xffffa72f),
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              height: 90,
+              child: Center(
+                child:
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      new Image.asset(
+                        'images/clock.png',
+                        height: 30.0,
+                      ),
+                      new Text(
+                        " 優惠倒數 "+"1:" + '$_start'.toString(),
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ]
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

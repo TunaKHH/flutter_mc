@@ -1,6 +1,6 @@
-# mc
+# learn_flutter
 
-fake mc
+A new Flutter project.
 
 ## Getting Started
 
